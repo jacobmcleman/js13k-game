@@ -1,3 +1,6 @@
 .DS_STORE
 node_modules
 zip
+# probably will regret this, but since code should all be .ts and .js should only be build artefacts...
+*.js
+dist
