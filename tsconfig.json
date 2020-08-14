@@ -1,4 +1,5 @@
 {
+  "files": ["src/ts/*.ts"],
     "compilerOptions": {
       "noImplicitAny": true,
       "target": "es6"

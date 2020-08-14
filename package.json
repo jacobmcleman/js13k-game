@@ -10,9 +10,12 @@
   "author": "Shreyas Minocha",
   "license": "MIT",
   "dependencies": {
+    "browserify": "^16.5.2",
     "express": "^4.17.1",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "typescript": "^3.9.7"
+    "tsify": "^5.0.1",
+    "typescript": "^3.9.7",
+    "vinyl-source-stream": "^2.0.0"
   },
   "devDependencies": {
     "gulp": "^4.0.0",
