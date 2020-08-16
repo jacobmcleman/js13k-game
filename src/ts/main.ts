@@ -10,6 +10,7 @@ let canvas = canvasElement as HTMLCanvasElement;
 const scene = new Scene(canvas);
 
 const square = new Sprite(scene.AddTexture(SquareSprite()));
+square.position.set(100, 100);
 scene.Add(square);
 
 requestAnimationFrame(GetRenderFn(scene));

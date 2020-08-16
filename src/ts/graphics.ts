@@ -52,7 +52,7 @@ export class Scene {
 
     Render() {
         let red = (Math.sin(this.currentTime / 1000) + 1) * 0.5;
-        let green = 0;
+        let green = 1;
         let blue = 1 - (Math.sin(this.currentTime / 1000) + 1) * 0.5;
         this.SetBackground({red, green, blue});
         this.scene.render();

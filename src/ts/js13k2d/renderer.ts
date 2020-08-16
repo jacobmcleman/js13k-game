@@ -85,6 +85,8 @@ class Layer {
   }
 };
 
+
+
 export class TextureView {
   anchor: Point;
   size: Point;
@@ -111,7 +113,7 @@ export class TextureView {
     return frame;
     }
   }
-
+  
 export class Sprite
 {
   frame: TextureView;
@@ -167,6 +169,9 @@ class Point {
     return this;
   }
 };
+
+const nullFrame = new TextureView();
+nullFrame.glTexture = 0;
 
 export const Renderer = (canvas: HTMLCanvasElement, scale: number = 1, options?: any, ) => {
   const zeroLayer = new Layer(0);
@@ -282,7 +287,7 @@ export const Renderer = (canvas: HTMLCanvasElement, scale: number = 1, options?:
   let height: number;
 
   let count = 0;
-  let currentFrame: TextureView | null;
+  let currentFrame: TextureView = nullFrame;
   let alphaTestMode: boolean;
 
   const resize = () => {
@@ -309,17 +314,15 @@ export const Renderer = (canvas: HTMLCanvasElement, scale: number = 1, options?:
     }
     */
 
-    if(currentFrame !== null) {
-      gl.blendFunc(alphaTestMode ? GL_ENUM.GL_ONE : blend, alphaTestMode ? GL_ENUM.GL_ZERO : GL_ENUM.GL_ONE_MINUS_SRC_ALPHA);
-      gl.depthFunc(alphaTestMode ? GL_ENUM.GL_LESS : GL_ENUM.GL_LEQUAL);
+    gl.blendFunc(alphaTestMode ? GL_ENUM.GL_ONE : blend, alphaTestMode ? GL_ENUM.GL_ZERO : GL_ENUM.GL_ONE_MINUS_SRC_ALPHA);
+    gl.depthFunc(alphaTestMode ? GL_ENUM.GL_LESS : GL_ENUM.GL_LEQUAL);
   
-      gl.bindTexture(GL_ENUM.GL_TEXTURE_2D, currentFrame.glTexture);
-      gl.uniform1i(textureLocation, currentFrame.glTexture);
-      gl.uniform1f(alphaTestLocation, alphaTestMode ? currentFrame.glTexture : 0);
+    gl.bindTexture(GL_ENUM.GL_TEXTURE_2D, currentFrame.glTexture);
+    gl.uniform1i(textureLocation, currentFrame.glTexture);
+    gl.uniform1f(alphaTestLocation, alphaTestMode ? currentFrame.glTexture : 0);
   
-      gl.bufferSubData(GL_ENUM.GL_ARRAY_BUFFER, 0, floatView.subarray(0, count * floatSize));
-      ext.drawElementsInstancedANGLE(GL_ENUM.GL_TRIANGLES, 6, GL_ENUM.GL_UNSIGNED_BYTE, 0, count);
-    }
+    gl.bufferSubData(GL_ENUM.GL_ARRAY_BUFFER, 0, floatView.subarray(0, count * floatSize));
+    ext.drawElementsInstancedANGLE(GL_ENUM.GL_TRIANGLES, 6, GL_ENUM.GL_UNSIGNED_BYTE, 0, count);
 
     count = 0;
   };
@@ -332,7 +335,7 @@ export const Renderer = (canvas: HTMLCanvasElement, scale: number = 1, options?:
     const { frame } = sprite;
     const { uvs } = frame;
 
-    if (currentFrame && currentFrame.glTexture !== frame.glTexture) {
+    if (currentFrame.glTexture !== frame.glTexture) {
       currentFrame.glTexture && flush();
       currentFrame = frame;
     }

@@ -4,7 +4,6 @@ export function SquareSprite(){
     canvas.width = 32;
     canvas.height = 32;
     const size = 32;
-    const half = size / 2;
 
     const ctx = canvas.getContext('2d');
 
