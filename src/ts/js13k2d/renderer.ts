@@ -85,7 +85,7 @@ class Layer {
   }
 };
 
-class TextureView {
+export class TextureView {
   anchor: Point;
   size: Point;
   uvs: number[];
@@ -112,7 +112,7 @@ class TextureView {
     }
   }
 
-class Sprite
+export class Sprite
 {
   frame: TextureView;
   visible: boolean;
@@ -309,15 +309,18 @@ export const Renderer = (canvas: HTMLCanvasElement, scale: number = 1, options?:
     }
     */
 
-    gl.blendFunc(alphaTestMode ? GL_ENUM.GL_ONE : blend, alphaTestMode ? GL_ENUM.GL_ZERO : GL_ENUM.GL_ONE_MINUS_SRC_ALPHA);
-    gl.depthFunc(alphaTestMode ? GL_ENUM.GL_LESS : GL_ENUM.GL_LEQUAL);
+    if(currentFrame !== null) {
+      gl.blendFunc(alphaTestMode ? GL_ENUM.GL_ONE : blend, alphaTestMode ? GL_ENUM.GL_ZERO : GL_ENUM.GL_ONE_MINUS_SRC_ALPHA);
+      gl.depthFunc(alphaTestMode ? GL_ENUM.GL_LESS : GL_ENUM.GL_LEQUAL);
+  
+      gl.bindTexture(GL_ENUM.GL_TEXTURE_2D, currentFrame.glTexture);
+      gl.uniform1i(textureLocation, currentFrame.glTexture);
+      gl.uniform1f(alphaTestLocation, alphaTestMode ? currentFrame.glTexture : 0);
+  
+      gl.bufferSubData(GL_ENUM.GL_ARRAY_BUFFER, 0, floatView.subarray(0, count * floatSize));
+      ext.drawElementsInstancedANGLE(GL_ENUM.GL_TRIANGLES, 6, GL_ENUM.GL_UNSIGNED_BYTE, 0, count);
+    }
 
-    gl.bindTexture(GL_ENUM.GL_TEXTURE_2D, currentFrame !== null ? currentFrame.glTexture : 0);
-    gl.uniform1i(textureLocation, currentFrame.glTexture);
-    gl.uniform1f(alphaTestLocation, alphaTestMode ? currentFrame.glTexture : 0);
-
-    gl.bufferSubData(GL_ENUM.GL_ARRAY_BUFFER, 0, floatView.subarray(0, count * floatSize));
-    ext.drawElementsInstancedANGLE(GL_ENUM.GL_TRIANGLES, 6, GL_ENUM.GL_UNSIGNED_BYTE, 0, count);
     count = 0;
   };
 
